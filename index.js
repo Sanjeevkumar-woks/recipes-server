@@ -1,17 +1,32 @@
-import express from "express";
-import cors from "cors";
-import apis from "./src/routes/index.js";
+import dotenv from "dotenv";
+import connectDB from "./config/mongodb.js";
+import app from "./server.js";
 
-//create express app
-const app = express();
+//config dotenv
+dotenv.config();
 
-//add middleware for parsing request body to json
-app.use(express.json());
+//function to Start Server
+const bootstrap = async () => {
+  try {
+    //env variables
+    const PORT = process.env.PORT;
+    const MONGO_URI = process.env.MONGO_URI;
 
-//add middleware for cors for all routes to allow cross origin requests
-app.use(cors());
+    //connect to mongodb
+    connectDB(MONGO_URI);
 
-//add routes here for the apis
-app.use("/recipes-services", apis);
+    //server Listening
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    //error handling
+    console.info(error);
+  }
 
-export default app;
+  app.get("/", (req, res) => {
+    res.send({ message: "Hello World" });
+  });
+};
+
+bootstrap();
