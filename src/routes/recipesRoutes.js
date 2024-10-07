@@ -1,5 +1,4 @@
 import { Router } from "express";
-import asyncHandler from "express-async-handler";
 import { RecipesController } from "../controllers/recipesController.js";
 
 // Create express router for recipes

@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
 import connectDB from "./config/mongodb.js";
 import app from "./server.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 //config dotenv
 dotenv.config();
@@ -25,7 +29,7 @@ const bootstrap = async () => {
   }
 
   app.get("/", (req, res) => {
-    res.send({ message: "Hello World" });
+    res.sendFile(__dirname + "/display.html");
   });
 };
 

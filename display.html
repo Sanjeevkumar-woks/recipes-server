@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipes API Documentation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        line-height: 1.6;
+        background-color: #f9f9f9;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+      }
+      h1 {
+        text-align: center;
+      }
+      code {
+        background-color: #f4f4f4;
+        padding: 2px 5px;
+        border-radius: 4px;
+      }
+      pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-left: 3px solid #3498db;
+        overflow-x: auto;
+      }
+      .endpoint {
+        background-color: #ecf0f1;
+        padding: 15px;
+        border-left: 5px solid #2980b9;
+        margin-bottom: 20px;
+      }
+      .example-response {
+        background-color: #ecf0f1;
+        padding: 10px;
+        border: 1px solid #bdc3c7;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Recipes API Documentation</h1>
+    <p>
+      This API provides endpoints to manage recipes, including creating,
+      reading, updating, and deleting recipe data. The API is built using
+      Express.js and MongoDB for data storage.
+    </p>
+
+    <h2>Base URL</h2>
+    <p><code>https://recipes-server-tau.vercel.app/recipes-services/recipes</code></p>
+
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+      <h3>1. Get All Recipes</h3>
+      <p>Retrieve a list of all recipes stored in the database.</p>
+      <p><strong>URL:</strong> <code>/getAllRecipes</code></p>
+      <p><strong>Method:</strong> GET</p>
+      <h4>Response:</h4>
+      <p><strong>200 OK:</strong> Returns an array of all recipes.</p>
+      <a
+        href="https://recipes-server-tau.vercel.app/recipes-services/recipes/getAllRecipes"
+        target="_blank"
+        >Example Request</a
+      >
+      <pre><code>[
+  {
+    "_id": "6700d47a8f5fb03e5b2948f0",
+    "name": "Spaghetti Bolognese",
+    "ingredients": ["spaghetti", "minced meat", "tomato sauce"],
+    "instructions": "Cook spaghetti and mix with sauce.",
+    "category": "Italian",
+    "image": "spaghetti.jpg"
+  }
+]</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>2. Get Recipe By ID</h3>
+      <p>Retrieve details of a specific recipe by its unique ID.</p>
+      <p><strong>URL:</strong> <code>/getRecipeById</code></p>
+      <p><strong>Method:</strong> GET</p>
+      <p>
+        <strong>Query Parameter:</strong> <code>id</code> (required): The unique
+        identifier of the recipe.
+      </p>
+      <h4>Response:</h4>
+      <p>
+        <strong>200 OK:</strong> Returns the recipe object corresponding to the
+        provided ID.
+      </p>
+      <p>
+        <strong>404 Not Found:</strong> If the recipe with the given ID does not
+        exist.
+      </p>
+
+      <a
+        href="https://recipes-server-tau.vercel.app/recipes-services/recipes/getRecipeById?id=6700d47a8f5fb03e5b2948f0"
+        target="_blank"
+        >Example Request</a
+      >
+      <pre><code>GET /getRecipeById?id=6700d47a8f5fb03e5b2948f0</code></pre>
+      <h4>Example Response:</h4>
+      <pre><code>{
+        "_id": "6700d47a8f5fb03e5b2948f0",
+        "name": "Vegetarian Lasagna",
+        "ingredients": [
+          "Lasagna noodles",
+          "Ricotta cheese",
+          "Spinach",
+          "Tomato sauce",
+          "Mozzarella cheese"
+        ],
+        "instructions": "Layer lasagna noodles with ricotta cheese, spinach, and tomato sauce in a baking dish. Top with mozzarella cheese and bake at 180°C for 30 minutes.",
+        "category": "Pasta",
+        "image": "https://example.com/vegetarian-lasagna.jpg",
+        "__v": 0
+      }</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>3. Search Recipe</h3>
+      <p>Search for recipes based on name, ingredients, or category.</p>
+      <p><strong>URL:</strong> <code>/searchRecipe</code></p>
+      <p><strong>Method:</strong> GET</p>
+      <p><strong>Query Parameters:</strong></p>
+      <ul>
+        <li><code>name</code> (optional): Search recipes by name.</li>
+        <li>
+          <code>ingredient</code> (optional): Search recipes containing a
+          specific ingredient.
+        </li>
+        <li><code>category</code> (optional): Search recipes by category.</li>
+      </ul>
+      <h4>Response:</h4>
+      <p>
+        <strong>200 OK:</strong> Returns an array of recipes that match the
+        search criteria.
+      </p>
+      <p><strong>404 Not Found:</strong> If no matching recipes are found.</p>
+      <h4>Example Request:</h4>
+      <pre><code>GET searchRecipe?search=pizza</code></pre>
+      <a
+        href="https://recipes-server-tau.vercel.app/recipes-services/recipes/searchRecipe?search=pizza"
+        target="_blank"
+        >Example Response:</a
+      >
+      <pre><code>[
+        {
+          "_id": "6700d47a8f5fb03e5b2948ea",
+          "name": "Margherita Pizza",
+          "ingredients": [
+            "Pizza dough",
+            "Tomato sauce",
+            "Fresh mozzarella",
+            "Basil",
+            "Olive oil"
+          ],
+          "instructions": "Spread tomato sauce over pizza dough. Add fresh mozzarella and basil. Drizzle with olive oil. Bake at 220°C for 10-12 minutes until crust is golden.",
+          "category": "Pizza",
+          "image": "https://example.com/margherita-pizza.jpg",
+          "__v": 0
+        }
+      ]</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>4. Add One Recipe</h3>
+      <p>Add a new recipe to the database.</p>
+      <p><strong>URL:</strong> <code>/addOneRecipe</code></p>
+      <p><strong>Method:</strong> POST</p>
+      <p><strong>Request Body:</strong></p>
+      <ul>
+        <li><code>name</code> (required): The name of the recipe.</li>
+        <li>
+          <code>ingredients</code> (required): A list of ingredients used in the
+          recipe.
+        </li>
+        <li>
+          <code>instructions</code> (required): The preparation instructions.
+        </li>
+        <li>
+          <code>category</code> (required): The category (e.g., Italian,
+          Mexican).
+        </li>
+        <li>
+          <code>image</code> (required): A URL or filename of the recipe image.
+        </li>
+      </ul>
+      <h4>Response:</h4>
+      <p><strong>201 Created:</strong> Recipe created successfully.</p>
+      <p>
+        <strong>400 Bad Request:</strong> If required fields are missing or
+        invalid.
+      </p>
+
+      <h4>Example Request:</h4>
+      <pre><code>{
+  "name": "Grilled Cheese Sandwich",
+  "ingredients": ["bread", "cheese", "butter"],
+  "instructions": "Grill the sandwich with butter until golden brown.",
+  "category": "American",
+  "image": "grilled-cheese.jpg"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>5. Add Many Recipes</h3>
+      <p>Add multiple recipes to the database at once.</p>
+      <p><strong>URL:</strong> <code>/addManyRecipes</code></p>
+      <p><strong>Method:</strong> POST</p>
+      <p>
+        <strong>Request Body:</strong> An array of recipe objects, each
+        containing:
+      </p>
+      <ul>
+        <li><code>name</code> (required): The name of the recipe.</li>
+        <li>
+          <code>ingredients</code> (required): A list of ingredients used in the
+          recipe.
+        </li>
+        <li>
+          <code>instructions</code> (required): The preparation instructions.
+        </li>
+        <li>
+          <code>category</code> (required): The category (e.g., Italian,
+          Mexican).
+        </li>
+        <li>
+          <code>image</code> (required): A URL or filename of the recipe image.
+        </li>
+      </ul>
+      <h4>Response:</h4>
+      <p><strong>201 Created:</strong> Recipes added successfully.</p>
+      <p>
+        <strong>400 Bad Request:</strong> If required fields are missing or
+        invalid.
+      </p>
+
+      <h4>Example Request:</h4>
+      <pre><code>[
+  {
+    "name": "Tacos",
+    "ingredients": ["taco shells", "beef", "cheese", "lettuce"],
+    "instructions": "Cook beef, fill tacos, and add toppings.",
+    "category": "Mexican",
+    "image": "tacos.jpg"
+  },
+  {
+    "name": "Chocolate Cake",
+    "ingredients": ["flour", "sugar", "cocoa", "eggs"],
+    "instructions": "Bake cake and top with frosting.",
+    "category": "Dessert",
+    "image": "chocolate-cake.jpg"
+  }
+]</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>6. Update Recipe</h3>
+      <p>
+        Update an existing recipe's details by providing the recipe ID and the
+        new data.
+      </p>
+      <p><strong>URL:</strong> <code>/updateRecipe</code></p>
+      <p><strong>Method:</strong> PUT</p>
+      <p><strong>Request Body:</strong></p>
+      <ul>
+        <li>
+          <code>id</code> (required): The unique identifier of the recipe to
+          update.
+        </li>
+        <li><code>name</code> (optional): The updated name of the recipe.</li>
+        <li>
+          <code>ingredients</code> (optional): Updated list of ingredients.
+        </li>
+        <li>
+          <code>instructions</code> (optional): Updated preparation
+          instructions.
+        </li>
+        <li>
+          <code>category</code> (optional): Updated category (e.g., Italian,
+          Mexican).
+        </li>
+        <li><code>image</code> (optional): Updated image URL or filename.</li>
+      </ul>
+      <h4>Response:</h4>
+      <p><strong>200 OK:</strong> If the recipe is updated successfully.</p>
+      <p>
+        <strong>404 Not Found:</strong> If the recipe with the given ID does not
+        exist.
+      </p>
+      <p>
+        <strong>500 Internal Server Error:</strong> If an error occurs during
+        the update request.
+      </p>
+      <h4>Example Request:</h4>
+      <pre><code>{
+  "id": "64b7a1e9f1ad3f18a94c15d1",
+  "name": "Updated Spaghetti Bolognese",
+  "ingredients": ["spaghetti", "minced meat", "tomato sauce", "garlic"],
+  "instructions": "Cook spaghetti, mix with sauce and garlic.",
+  "category": "Italian",
+  "image": "updated-spaghetti.jpg"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <h3>7. Delete Recipe</h3>
+      <p>Delete a recipe from the database by its unique ID.</p>
+      <p><strong>URL:</strong> <code>/deleteRecipe</code></p>
+      <p><strong>Method:</strong> DELETE</p>
+      <p>
+        <strong>Query Parameter:</strong> <code>id</code> (required): The unique
+        identifier of the recipe to delete.
+      </p>
+      <h4>Response:</h4>
+      <p><strong>200 OK:</strong> If the recipe is deleted successfully.</p>
+      <p>
+        <strong>404 Not Found:</strong> If the recipe with the given ID does not
+        exist.
+      </p>
+      <p>
+        <strong>500 Internal Server Error:</strong> If an error occurs during
+        the deletion request.
+      </p>
+      <h4>Example Request:</h4>
+      <pre><code>DELETE /deleteRecipe?id=64b7a1e9f1ad3f18a94c15d1</code></pre>
+      <h4>Example Response:</h4>
+      <pre><code>{
+  "message": "Recipe deleted successfully."
+}</code></pre>
+    </div>
+    <div>
+      <p> Author: <a href="https://github.com/Sanjeevkumar-woks" target="_blank" >sanjeevkumar</a></p>
+    </p>
+    </div>
+  </body>
+</html>
